@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: CURRENCIES_TABLE-create
+      author: bikchintaev
+      changes:
+        - createTable:
+            tableName: CURRENCIES_TABLE
+            columns:
+              - column:
+                  name: ID
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: CODE
+                  type: varchar2(3)
+              - column:
+                  name: FULL_NAME
+                  type: varchar2(32)
+              - column:
+                  name: SIGN
+                  type: varchar2(64)
+        - createIndex:
+            indexName: unique_code_idx
+            tableName: CURRENCIES_TABLE
+            unique: true
+            columns:
+              - column:
+                  name: CODE
+      rollback:
+        - dropTable:
+            tableName: CURRENCIES_TABLE
+  - changeSet:
+      id: EXCHANGE_RATES_TABLE-create
+      author: bikchintaev
+      changes:
+        - createTable:
+            tableName: EXCHANGE_RATES_TABLE
+            columns:
+              - column:
+                  name: ID
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: BASE_CURRENCY_ID
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: TARGET_CURRENCY_ID
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: RATE
+                  type: decimal(6,4)
+        - createIndex:
+            indexName: unique_currency_pair_idx
+            tableName: EXCHANGE_RATES_TABLE
+            unique: true
+            columns:
+              - column:
+                  name: BASE_CURRENCY_ID
+              - column:
+                  name: TARGET_CURRENCY_ID
+        - addForeignKeyConstraint:
+            constraintName: FK_BASE_CURRENCY
+            baseTableName: EXCHANGE_RATES_TABLE
+            baseColumnNames: BASE_CURRENCY_ID
+            referencedTableName: CURRENCIES_TABLE
+            referencedColumnNames: ID
+        - addForeignKeyConstraint:
+            constraintName: FK_TARGET_CURRENCY
+            baseTableName: EXCHANGE_RATES_TABLE
+            baseColumnNames: TARGET_CURRENCY_ID
+            referencedTableName: CURRENCIES_TABLE
+            referencedColumnNames: ID
+      rollback:
+        - dropTable:
+            tableName: EXCHANGE_RATES_TABLE
