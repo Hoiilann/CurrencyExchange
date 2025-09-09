@@ -10,13 +10,18 @@ import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.exception.LiquibaseException;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class ExchangeRatesDao {
 
     private static final String URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
@@ -152,4 +157,8 @@ public class ExchangeRatesDao {
         }
     }
 
+    @Override
+    public String toString() {
+        return "ExchangeRatesDao{}";
+    }
 }

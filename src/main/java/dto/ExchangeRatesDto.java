@@ -1,13 +1,41 @@
 package dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.Objects;
+
+@Getter
+@Setter
 @NoArgsConstructor
 public class ExchangeRatesDto {
 
     private String baseCurrencyCode;
     private String targetCurrencyCode;
     private Float rate;
+
+    @Override
+    public String toString() {
+        return "ExchangeRatesDto{" +
+                "baseCurrencyCode='" + baseCurrencyCode + '\'' +
+                ", targetCurrencyCode='" + targetCurrencyCode + '\'' +
+                ", rate=" + rate +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExchangeRatesDto that = (ExchangeRatesDto) o;
+        return Objects.equals(baseCurrencyCode, that.baseCurrencyCode) && Objects.equals(targetCurrencyCode, that.targetCurrencyCode) && Objects.equals(rate, that.rate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(baseCurrencyCode);
+        result = 31 * result + Objects.hashCode(targetCurrencyCode);
+        result = 31 * result + Objects.hashCode(rate);
+        return result;
+    }
 }

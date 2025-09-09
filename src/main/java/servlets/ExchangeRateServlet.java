@@ -6,6 +6,7 @@ import dto.ExchangeRateDto;
 import dto.ExchangeRatesDto;
 import entities.ExchangeRate;
 import lombok.NoArgsConstructor;
+import services.ExchangeRateService;
 import utils.Util;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @NoArgsConstructor
 @WebServlet("/exchangeRate/*")
@@ -22,6 +22,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private ExchangeRatesDao exchangeRateDao = new ExchangeRatesDao();
+    private ExchangeRateService exchangeRateService = new ExchangeRateService(new ExchangeRatesDao());
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,20 +40,10 @@ public class ExchangeRateServlet extends HttpServlet {
             String baseCurrencyCode = pathInfo.substring(1,4);
             String targetCurrencyCode = pathInfo.substring(4,7);
 
-            List<ExchangeRate> exchangeRates = exchangeRateDao.getExchangeRateByCodes(baseCurrencyCode,targetCurrencyCode);
-            if (!(exchangeRates.isEmpty())) {
-                for (ExchangeRate exchangeRate : exchangeRates) {
-                    String json;
-                    if (exchangeRate.getBaseCurrency().getCode().equals(baseCurrencyCode)) {
-                        json = objectMapper.writeValueAsString(exchangeRate);
-
-                    } else {
-                        json = objectMapper.writeValueAsString(exchangeRates.getFirst());
-
-                    }
-                    response.getWriter().write(json);
-                    break;
-                }
+            ExchangeRate exchangeRate = exchangeRateService.getExchangeRateByCodes(baseCurrencyCode,targetCurrencyCode);
+            if (exchangeRate != null) {
+                String json = objectMapper.writeValueAsString(exchangeRate);
+                response.getWriter().write(json);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND,"Обменный курс для пары не найден");
                 }

@@ -8,13 +8,24 @@ import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.exception.LiquibaseException;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class CurrencyDao {
 
     private static final String URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
@@ -96,6 +107,11 @@ public class CurrencyDao {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyDao{}";
     }
 
 }
