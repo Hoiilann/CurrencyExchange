@@ -20,8 +20,8 @@ import java.util.List;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private CurrencyDao currencyDao = new CurrencyDao();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CurrencyDao currencyDao = new CurrencyDao();
 
 
 

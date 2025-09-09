@@ -18,8 +18,8 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private ExchangeRatesDao exchangeRateDao = new ExchangeRatesDao();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ExchangeRatesDao exchangeRateDao = new ExchangeRatesDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

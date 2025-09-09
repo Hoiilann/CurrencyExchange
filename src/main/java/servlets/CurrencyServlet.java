@@ -15,8 +15,8 @@ import java.io.IOException;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private CurrencyDao currencyDao = new CurrencyDao();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CurrencyDao currencyDao = new CurrencyDao();
 
 
     @Override

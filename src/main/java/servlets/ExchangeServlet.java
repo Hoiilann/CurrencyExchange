@@ -17,8 +17,8 @@ import java.io.IOException;
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private ExchangeRateService exchangeRateService = new ExchangeRateService(new ExchangeRatesDao());
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ExchangeRateService exchangeRateService = new ExchangeRateService(new ExchangeRatesDao());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

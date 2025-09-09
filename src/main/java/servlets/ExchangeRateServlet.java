@@ -20,9 +20,9 @@ import java.io.IOException;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private ExchangeRatesDao exchangeRateDao = new ExchangeRatesDao();
-    private ExchangeRateService exchangeRateService = new ExchangeRateService(new ExchangeRatesDao());
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ExchangeRatesDao exchangeRateDao = new ExchangeRatesDao();
+    private final ExchangeRateService exchangeRateService = new ExchangeRateService(new ExchangeRatesDao());
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
