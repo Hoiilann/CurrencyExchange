@@ -26,6 +26,17 @@ public class ExchangeRatesDao {
     private static final String URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
     private static Connection connection;
 
+    private static final String ER_ID = "ER_id";
+    private static final String BC_ID = "BC_id";
+    private static final String BC_CODE = "BC_code";
+    private static final String BC_FULL_NAME = "BC_full_name";
+    private static final String BC_SIGN = "BC_sign";
+
+    private static final String TC_ID = "TC_id";
+    private static final String TC_CODE = "TC_code";
+    private static final String TC_FULL_NAME = "TC_full_name";
+    private static final String TC_SIGN = "TC_sign";
+    private static final String RATE = "rate";
     static {
         try {
             connection = DriverManager.getConnection(URL);
@@ -54,20 +65,20 @@ public class ExchangeRatesDao {
             while (resultSet.next()) {
 
                 exchangeRates.add(ExchangeRate.builder()
-                        .id(resultSet.getLong("ER_id"))
+                        .id(resultSet.getLong(ER_ID))
                         .baseCurrency(Currency.builder()
-                                .id(resultSet.getLong("BC_id"))
-                                .code(resultSet.getString("BC_code"))
-                                .fullName(resultSet.getString("BC_full_name"))
-                                .sign(resultSet.getString("BC_sign"))
+                                .id(resultSet.getLong(BC_ID))
+                                .code(resultSet.getString(BC_CODE))
+                                .fullName(resultSet.getString(BC_FULL_NAME))
+                                .sign(resultSet.getString(BC_SIGN))
                                 .build())
                         .targetCurrency(Currency.builder()
-                                .id(resultSet.getLong("TC_id"))
-                                .code(resultSet.getString("TC_code"))
-                                .fullName(resultSet.getString("TC_full_name"))
-                                .sign(resultSet.getString("TC_sign"))
+                                .id(resultSet.getLong(TC_ID))
+                                .code(resultSet.getString(TC_CODE))
+                                .fullName(resultSet.getString(TC_FULL_NAME))
+                                .sign(resultSet.getString(TC_SIGN))
                                 .build())
-                        .rate(resultSet.getFloat("rate"))
+                        .rate(resultSet.getFloat(RATE))
                         .build());
             }
         } catch (SQLException e) {
@@ -95,20 +106,20 @@ public class ExchangeRatesDao {
             while (resultSet.next()) {
 
                 exchangeRates.add(ExchangeRate.builder()
-                        .id(resultSet.getLong("ER_id"))
+                        .id(resultSet.getLong(ER_ID))
                         .baseCurrency(Currency.builder()
-                                .id(resultSet.getLong("BC_id"))
-                                .code(resultSet.getString("BC_code"))
-                                .fullName(resultSet.getString("BC_full_name"))
-                                .sign(resultSet.getString("BC_sign"))
+                                .id(resultSet.getLong(BC_ID))
+                                .code(resultSet.getString(BC_CODE))
+                                .fullName(resultSet.getString(BC_FULL_NAME))
+                                .sign(resultSet.getString(BC_SIGN))
                                 .build())
                         .targetCurrency(Currency.builder()
-                                .id(resultSet.getLong("TC_id"))
-                                .code(resultSet.getString("TC_code"))
-                                .fullName(resultSet.getString("TC_full_name"))
-                                .sign(resultSet.getString("TC_sign"))
+                                .id(resultSet.getLong(TC_ID))
+                                .code(resultSet.getString(TC_CODE))
+                                .fullName(resultSet.getString(TC_FULL_NAME))
+                                .sign(resultSet.getString(TC_SIGN))
                                 .build())
-                        .rate(resultSet.getFloat("rate"))
+                        .rate(resultSet.getFloat(RATE))
                         .build());
             }
         } catch (SQLException e) {

@@ -30,6 +30,12 @@ public class CurrencyDao {
     private static final String URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
     private static Connection connection;
 
+    private static final String ID = "ID";
+    private static final String CODE = "CODE";
+    private static final String FULL_NAME = "FULL_NAME";
+    private static final String SIGN = "SIGN";
+
+
     static {
         try {
             connection = DriverManager.getConnection(URL);
@@ -55,10 +61,10 @@ public class CurrencyDao {
             while (resultSet.next()) {
 
                 currencies.add(Currency.builder()
-                        .id(resultSet.getLong("ID"))
-                        .code(resultSet.getString("CODE"))
-                        .fullName(resultSet.getString("FULL_NAME"))
-                        .sign(resultSet.getString("SIGN"))
+                        .id(resultSet.getLong(ID))
+                        .code(resultSet.getString(CODE))
+                        .fullName(resultSet.getString(FULL_NAME))
+                        .sign(resultSet.getString(SIGN))
                         .build());
             }
         } catch (SQLException e) {
@@ -95,10 +101,10 @@ public class CurrencyDao {
 
             if (resultSet.next()) {
                return Currency.builder()
-                        .id(resultSet.getLong("ID"))
-                        .code(resultSet.getString("CODE"))
-                        .fullName(resultSet.getString("FULL_NAME"))
-                        .sign(resultSet.getString("SIGN"))
+                        .id(resultSet.getLong(ID))
+                        .code(resultSet.getString(CODE))
+                        .fullName(resultSet.getString(FULL_NAME))
+                        .sign(resultSet.getString(SIGN))
                         .build();
             }
 
