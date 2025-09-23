@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: CURRENCIES_TABLE-create
+      author: bikchintaev
+      changes:
+        - insert:
+            tableName: CURRENCIES_TABLE
+            columns:
+              - column:
+                  name: CODE
+                  value: 'RUB'
+              - column:
+                  name: FULL_NAME
+                  value: 'Russian Ruble'
+              - column:
+                  name: SIGN
+                  value: '₽'
+        - insert:
+            tableName: CURRENCIES_TABLE
+            columns:
+              - column:
+                  name: CODE
+                  value: 'USD'
+              - column:
+                  name: FULL_NAME
+                  value: 'US Dollar'
+              - column:
+                  name: SIGN
+                  value: '$'
+        - insert:
+            tableName: CURRENCIES_TABLE
+            columns:
+              - column:
+                  name: CODE
+                  value: 'CNY'
+              - column:
+                  name: FULL_NAME
+                  value: 'Yuan Renminbi'
+              - column:
+                  name: SIGN
+                  value: '¥'
+      rollback:
+        - delete:
+            tableName: CURRENCIES_TABLE
+  - changeSet:
+      id: EXCHANGE_RATES_TABLE-create
+      author: bikchintaev
+      changes:
+        - insert:
+            tableName: EXCHANGE_RATES_TABLE
+            columns:
+              - column:
+                  name: BASE_CURRENCY_ID
+                  value: '1'
+              - column:
+                  name: TARGET_CURRENCY_ID
+                  value: '2'
+              - column:
+                  name: RATE
+                  valueNumeric: 0.012
+        - insert:
+            tableName: EXCHANGE_RATES_TABLE
+            columns:
+              - column:
+                  name: BASE_CURRENCY_ID
+                  value: '2'
+              - column:
+                  name: TARGET_CURRENCY_ID
+                  value: '3'
+              - column:
+                  name: RATE
+                  valueNumeric: 7.15
+      rollback:
+        - delete:
+            tableName: EXCHANGE_RATES_TABLE
