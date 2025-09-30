@@ -27,48 +27,56 @@ public class ExchangeRateService {
             if (exchangeRatesUSDB.isEmpty()) {
                 return null;
             }
-            for (ExchangeRate exchangeRateUSDA : exchangeRatesUSDA) {
-                for (ExchangeRate exchangeRateUSDB : exchangeRatesUSDB){
-                    if (exchangeRateUSDB.getBaseCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
-                     && exchangeRateUSDA.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
-                        return returnObject(exchangeRateUSDA.getBaseCurrency(),exchangeRateUSDB.getBaseCurrency(),
-                                Util.divideFloat(exchangeRateUSDA.getRate(),exchangeRateUSDB.getRate()),
-                                exchangeDto.getAmount(),Util.multiplyFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDA.getRate()),
-                                                                                                                     exchangeRateUSDB.getRate()));
-                    } else if (exchangeRateUSDB.getTargetCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
-                            && exchangeRateUSDA.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
-                        return returnObject(exchangeRateUSDA.getBaseCurrency(),exchangeRateUSDB.getTargetCurrency(),
-                                            Util.multiplyFloat(exchangeRateUSDA.getRate(),exchangeRateUSDB.getRate()),
-                                            exchangeDto.getAmount(),Util.multiplyFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDA.getRate()),
-                                                                                                                                 exchangeRateUSDB.getRate()));
-                    } else if (exchangeRateUSDB.getTargetCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
-                            && exchangeRateUSDA.getTargetCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
-                        return returnObject(exchangeRateUSDA.getTargetCurrency(),exchangeRateUSDB.getTargetCurrency(),
-                                            Util.divideFloat(exchangeRateUSDB.getRate(),exchangeRateUSDA.getRate()),
-                                            exchangeDto.getAmount(),Util.divideFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDB.getRate()),
-                                                                                                                                exchangeRateUSDA.getRate()));
-                    } else {
-                        return returnObject(exchangeRateUSDA.getTargetCurrency(),exchangeRateUSDB.getBaseCurrency(),
-                                Util.divideFloat(1f,Util.multiplyFloat(exchangeRateUSDB.getRate(),exchangeRateUSDA.getRate())),
-                                exchangeDto.getAmount(),Util.divideFloat(Util.divideFloat(exchangeDto.getAmount(),exchangeRateUSDB.getRate()),
-                                                                                                                 exchangeRateUSDA.getRate()));
-                    }
-                }
-            }
+            return getExchangeRateThroughCrossExchange(exchangeRatesUSDA,exchangeRatesUSDB, exchangeDto);
         } else {
-            for (ExchangeRate exchangeRate : exchangeRates) {
-                if (exchangeRate.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
-                    return returnObject(exchangeRate.getBaseCurrency(),exchangeRate.getTargetCurrency(),
-                            exchangeRate.getRate(),exchangeDto.getAmount(),
-                            Util.multiplyFloat(exchangeRate.getRate(),exchangeDto.getAmount()));
-                } else {
-                    return returnObject(exchangeRate.getTargetCurrency(),exchangeRate.getBaseCurrency(),
-                                        Util.divideFloat(1f,exchangeRate.getRate()),
-                                        exchangeDto.getAmount(),Util.divideFloat(exchangeDto.getAmount(),exchangeRate.getRate()));
+            return getExchangeRateThroughDirectExchange(exchangeRates,exchangeDto);
+        }
+    }
 
+    private ExchangeRateWithAmountDto getExchangeRateThroughCrossExchange (List<ExchangeRate> exchangeRatesUSDA, List<ExchangeRate> exchangeRatesUSDB, ExchangeDto exchangeDto) {
+        for (ExchangeRate exchangeRateUSDA : exchangeRatesUSDA) {
+            for (ExchangeRate exchangeRateUSDB : exchangeRatesUSDB){
+                if (exchangeRateUSDB.getBaseCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
+                        && exchangeRateUSDA.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
+                    return returnDto(exchangeRateUSDA.getBaseCurrency(),exchangeRateUSDB.getBaseCurrency(),
+                            Util.divideFloat(exchangeRateUSDA.getRate(),exchangeRateUSDB.getRate()),
+                            exchangeDto.getAmount(),Util.multiplyFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDA.getRate()),
+                                    exchangeRateUSDB.getRate()));
+                } else if (exchangeRateUSDB.getTargetCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
+                        && exchangeRateUSDA.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
+                    return returnDto(exchangeRateUSDA.getBaseCurrency(),exchangeRateUSDB.getTargetCurrency(),
+                            Util.multiplyFloat(exchangeRateUSDA.getRate(),exchangeRateUSDB.getRate()),
+                            exchangeDto.getAmount(),Util.multiplyFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDA.getRate()),
+                                    exchangeRateUSDB.getRate()));
+                } else if (exchangeRateUSDB.getTargetCurrency().getCode().equals(exchangeDto.getTargetCurrencyCode())
+                        && exchangeRateUSDA.getTargetCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
+                    return returnDto(exchangeRateUSDA.getTargetCurrency(),exchangeRateUSDB.getTargetCurrency(),
+                            Util.divideFloat(exchangeRateUSDB.getRate(),exchangeRateUSDA.getRate()),
+                            exchangeDto.getAmount(),Util.divideFloat(Util.multiplyFloat(exchangeDto.getAmount(),exchangeRateUSDB.getRate()),
+                                    exchangeRateUSDA.getRate()));
+                } else {
+                    return returnDto(exchangeRateUSDA.getTargetCurrency(),exchangeRateUSDB.getBaseCurrency(),
+                            Util.divideFloat(1f,Util.multiplyFloat(exchangeRateUSDB.getRate(),exchangeRateUSDA.getRate())),
+                            exchangeDto.getAmount(),Util.divideFloat(Util.divideFloat(exchangeDto.getAmount(),exchangeRateUSDB.getRate()),
+                                    exchangeRateUSDA.getRate()));
                 }
             }
+        }
+        return null;
+    }
 
+    private ExchangeRateWithAmountDto getExchangeRateThroughDirectExchange (List<ExchangeRate> exchangeRates,ExchangeDto exchangeDto) {
+        for (ExchangeRate exchangeRate : exchangeRates) {
+            if (exchangeRate.getBaseCurrency().getCode().equals(exchangeDto.getBaseCurrencyCode())) {
+                return returnDto(exchangeRate.getBaseCurrency(),exchangeRate.getTargetCurrency(),
+                        exchangeRate.getRate(),exchangeDto.getAmount(),
+                        Util.multiplyFloat(exchangeRate.getRate(),exchangeDto.getAmount()));
+            } else {
+                return returnDto(exchangeRate.getTargetCurrency(),exchangeRate.getBaseCurrency(),
+                        Util.divideFloat(1f,exchangeRate.getRate()),
+                        exchangeDto.getAmount(),Util.divideFloat(exchangeDto.getAmount(),exchangeRate.getRate()));
+
+            }
         }
         return null;
     }
@@ -89,7 +97,7 @@ public class ExchangeRateService {
         return null;
     }
 
-    private ExchangeRateWithAmountDto returnObject (Currency baseCurrency, Currency tartgetCurrency, Float rate, Float amount, Float convertedAmount) {
+    private ExchangeRateWithAmountDto returnDto(Currency baseCurrency, Currency tartgetCurrency, Float rate, Float amount, Float convertedAmount) {
         return ExchangeRateWithAmountDto.builder()
                 .baseCurrency(Currency.builder()
                         .id(baseCurrency.getId())
